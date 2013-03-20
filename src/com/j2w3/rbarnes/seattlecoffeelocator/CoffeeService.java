@@ -15,6 +15,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -126,7 +129,7 @@ public class CoffeeService extends Service{
   	}
   	
   	private void getLocations(String dessert, String zipCode){
-		String baseUrl = "http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=qJIjRlbV34GJZfg2AwqSWVV03eeg8SpTQKy5PZqSfjlRrItt5hS2n3PIysdPU_CCIQlCGXIGjoTDESp3l42Ueic3O1EaYXU-&query="+dessert+"&zip="+zipCode+"&results=10&output=xml";
+		String baseUrl = "http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=qJIjRlbV34GJZfg2AwqSWVV03eeg8SpTQKy5PZqSfjlRrItt5hS2n3PIysdPU_CCIQlCGXIGjoTDESp3l42Ueic3O1EaYXU-&query="+dessert+"&zip="+zipCode+"&results=10&output=json";
 		URL finalURL;
 		try{
 			finalURL = new URL(baseUrl);
@@ -141,86 +144,60 @@ public class CoffeeService extends Service{
 	}
 	
 	//get results
-	private class LocationRequest extends AsyncTask<URL, Void, Boolean>{
+	private class LocationRequest extends AsyncTask<URL, Void, String>{
 		@Override
-		protected Boolean doInBackground(URL... params){
-			boolean response = false;
-			URL result = params[0];
-			if(result != null){
+		protected String doInBackground(URL... urls){
+			String response = "";
+			
+			for(URL url: urls){
 				
-				xmlParse(result);
+				response = getUrlStringResponse(url);
 			}
+			
 			return response;
 		}
 		
 		
-		private void xmlParse(URL result){
+		@Override
+		protected void onPostExecute(String result){
 			
-			XmlPullParser coffeeShops = null;
-			try {
-				coffeeShops = XmlPullParserFactory .newInstance().newPullParser();
-			} catch (XmlPullParserException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-			try {
-				coffeeShops.setInput(result.openStream(), null);
-			} catch (XmlPullParserException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			int eventType = 0;
-			try {
-				eventType = coffeeShops.getEventType();
-			} catch (XmlPullParserException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			while (eventType != XmlPullParser.END_DOCUMENT) {
-			    if (eventType == XmlPullParser.START_TAG) {
-			        String tagName = coffeeShops.getName();
-			        String tagText = coffeeShops.getText();
-			        if (tagName.equals("ResultSet")) {
-			        	
-			            // inner loop looking for link and title
-			            while (eventType != XmlPullParser.END_DOCUMENT) {
-			                if (eventType == XmlPullParser.START_TAG) {
-			                    if (tagName.equals("Result")) {
-			                    	
-			                    }
-			                } else if (eventType == XmlPullParser.END_TAG) {
-			                    if (tagName.equals("Categories")) {
-			                        // save the data, and then continue with
-			                        // the outer loop
-			                        break;
-			                    }
-			                }
-			                try {
-								eventType = coffeeShops.next();
-							} catch (XmlPullParserException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-			            }
-			        }else  if(eventType == XmlPullParser.TEXT){
-                		Log.i("tag", tagText);
-                	}
-			    }
-			    try {
-					eventType = coffeeShops.next();
-				} catch (XmlPullParserException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			Log.i("URL RESPONSE", result);
+			try{
+				JSONObject json = new JSONObject(result);
+				JSONObject locationsObject = json.getJSONObject("ResultSet");
+				if(locationsObject.getString("totalResultsAvailable").compareTo("0")==0){
+					_toast = Toast.makeText(_context, "No Results" , Toast.LENGTH_SHORT);
+					_toast.show();
+				}else{
+					JSONArray locations = locationsObject.getJSONArray("Result");
+					
+					if(locations != null){
+						_toast = Toast.makeText(_context, "Saving File.", Toast.LENGTH_SHORT);
+						_toast.show();
+						for(int i=0;i<locations.length();i++){							
+							JSONObject location = locations.getJSONObject(i);
+						Log.i("Location ", location.toString());}
+						/*_oldLocation.put("Title",  location.getString("Title"));
+						_oldLocation.put("Address", location.getString("Address"));
+						_oldLocation.put("City", location.getString("City"));
+						_oldLocation.put("State", location.getString("State"));
+						_oldLocation.put("Phone", location.getString("Phone"));
+						_oldLocation.put("Coords", location.getString("Latitude")+","+location.getString("Longitude"));
+						
+						
+						
+						//Save File
+						storeObjectFile(_context, "oldLocation", _oldLocation, false);*/
+						//Show data
+						
+					}else{
+						_toast = Toast.makeText(_context, "Something went wrong" , Toast.LENGTH_SHORT);
+						_toast.show();
+					}
 				}
+				
+			}catch(JSONException e){
+				Log.e("JSON", "JSON OBJECT EXCEPTION");
 			}
 			
 			
