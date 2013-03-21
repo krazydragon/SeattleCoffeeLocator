@@ -10,7 +10,6 @@
 package com.j2w3.rbarnes.seattlecoffeelocator;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -18,12 +17,6 @@ import java.net.URLConnection;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
