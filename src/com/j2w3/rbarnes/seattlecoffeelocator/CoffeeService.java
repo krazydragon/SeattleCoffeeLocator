@@ -127,7 +127,7 @@ public class CoffeeService extends Service{
   	}
   	
   	private void getLocations(String dessert, String zipCode){
-		String baseUrl = "http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=qJIjRlbV34GJZfg2AwqSWVV03eeg8SpTQKy5PZqSfjlRrItt5hS2n3PIysdPU_CCIQlCGXIGjoTDESp3l42Ueic3O1EaYXU-&query="+dessert+"&zip="+zipCode+"&results=10&output=json";
+		String baseUrl = "http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=qJIjRlbV34GJZfg2AwqSWVV03eeg8SpTQKy5PZqSfjlRrItt5hS2n3PIysdPU_CCIQlCGXIGjoTDESp3l42Ueic3O1EaYXU-&query="+dessert+"&zip="+zipCode+"&results=5&output=json";
 		URL finalURL;
 		try{
 			finalURL = new URL(baseUrl);
@@ -172,7 +172,7 @@ public class CoffeeService extends Service{
 					if(locations != null){
 						_toast = Toast.makeText(_context, "Saving File.", Toast.LENGTH_SHORT);
 						_toast.show();
-						for(int i=0;i<locations.length();i++){							
+						for(int i=0;i<3;i++){							
 							JSONObject location = locations.getJSONObject(i);
 						Log.i("Location ", location.toString());
 						ContentValues locationData = new ContentValues();

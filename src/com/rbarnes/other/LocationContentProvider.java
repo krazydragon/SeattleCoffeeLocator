@@ -64,7 +64,6 @@ public class LocationContentProvider extends ContentProvider{
 	public Uri insert(Uri uri, ContentValues inValues) {
 		ContentValues values = new ContentValues(inValues);
 		long rowId = db.insert(LocationDB.TABLE_NAME, null, values);
-
 		if(rowId > 0){
 		Uri url = ContentUris.withAppendedId(CONTENT_URI, rowId);
 		getContext().getContentResolver().notifyChange(url, null);
@@ -84,6 +83,8 @@ public class LocationContentProvider extends ContentProvider{
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sort) {
+		
+		
 		Cursor c = db.query(LocationDB.TABLE_NAME, projection, selection, selectionArgs, null, null, sort);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 		return c;
