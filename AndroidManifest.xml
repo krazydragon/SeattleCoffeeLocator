@@ -27,7 +27,11 @@
         </activity>
         <service android:name=".CoffeeService">
 		</service>
-        
+        <provider 
+            android:authorities="com.rbarnes.other.LocationContentProvider"
+    		android:multiprocess="true"
+    		android:name="com.rbarnes.other.LocationContentProvider">
+        </provider>
     </application>
 
 </manifest>

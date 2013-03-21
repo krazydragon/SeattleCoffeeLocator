@@ -17,7 +17,12 @@ import java.net.URLConnection;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.rbarnes.other.LocationContentProvider;
+import com.rbarnes.other.LocationDB;
+
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -169,20 +174,17 @@ public class CoffeeService extends Service{
 						_toast.show();
 						for(int i=0;i<locations.length();i++){							
 							JSONObject location = locations.getJSONObject(i);
-						Log.i("Location ", location.toString());}
-						/*_oldLocation.put("Title",  location.getString("Title"));
-						_oldLocation.put("Address", location.getString("Address"));
-						_oldLocation.put("City", location.getString("City"));
-						_oldLocation.put("State", location.getString("State"));
-						_oldLocation.put("Phone", location.getString("Phone"));
-						_oldLocation.put("Coords", location.getString("Latitude")+","+location.getString("Longitude"));
-						
-						
-						
-						//Save File
-						storeObjectFile(_context, "oldLocation", _oldLocation, false);*/
-						//Show data
-						
+						Log.i("Location ", location.toString());
+						ContentValues locationData = new ContentValues();
+						locationData.put(LocationDB.COL_TITLE, location.getString("Title"));
+						locationData.put(LocationDB.COL_ADDRESS, location.getString("Address"));
+						locationData.put(LocationDB.COL_CITY, location.getString("City"));
+						locationData.put(LocationDB.COL_STATE, location.getString("State"));
+						locationData.put(LocationDB.COL_PHONE, location.getString("Phone"));
+						locationData.put(LocationDB.COL_COORDS, location.getString("Latitude")+","+location.getString("Longitude"));
+						getContentResolver().insert(LocationContentProvider.CONTENT_URI,locationData);
+						}
+
 					}else{
 						_toast = Toast.makeText(_context, "Something went wrong" , Toast.LENGTH_SHORT);
 						_toast.show();
