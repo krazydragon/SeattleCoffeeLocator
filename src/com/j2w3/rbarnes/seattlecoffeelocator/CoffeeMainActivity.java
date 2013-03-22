@@ -19,20 +19,35 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 
 public class CoffeeMainActivity extends FragmentActivity implements OnLocationSelectedListener, CallListener {
 
 	
 	String _phoneStr = "";
+	Button _callButton;
+	CoffeeDetailFragment _fragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+		//Start Service load data
 		startService(new Intent(this, CoffeeService.class));
 		setContentView(R.layout.fragment_coffee_main);
+		_callButton = (Button)findViewById(R.id.callButton);
+		_fragment = (CoffeeDetailFragment)getSupportFragmentManager().findFragmentById(R.id.detailFragment);
 		
 		
-		
+		//If detail page is in layout hide button
+		if ((_fragment != null)&& _fragment.isInLayout()){
+			
+			_callButton.setVisibility(View.GONE);
+			
+			
+		}
 		
 	}
 
@@ -46,12 +61,12 @@ public class CoffeeMainActivity extends FragmentActivity implements OnLocationSe
 	@Override
 	public void onlocationSelected(String number) {
 		final Intent detailIntent = new Intent(this, CoffeeDetailActivity.class);
-		CoffeeDetailFragment fragment = (CoffeeDetailFragment)getSupportFragmentManager().findFragmentById(R.id.detailFragment);
+		//check layout
 		
-		if ((fragment != null)&& fragment.isInLayout()){
+		if ((_fragment != null)&& _fragment.isInLayout()){
 			
 			_phoneStr = "tel:" + number;
-			
+			_callButton.setVisibility(View.VISIBLE);
 			
 		} else {
 			//Save color and launch picker activity

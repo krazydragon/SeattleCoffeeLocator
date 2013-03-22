@@ -48,6 +48,8 @@ public class CoffeeService extends Service{
 		 Toast.makeText(this,"This service works :)", Toast.LENGTH_LONG).show();
 		 if (connected){
 				Log.i("SERVICE", "CONNECTED");
+			}else{
+				Log.i("SERVICE", "NOT CONNECTED");
 			}
 		 getLocations("Coffee", "98101");
 		 this.stopSelf();
@@ -127,7 +129,7 @@ public class CoffeeService extends Service{
   	}
   	
   	private void getLocations(String dessert, String zipCode){
-		String baseUrl = "http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=qJIjRlbV34GJZfg2AwqSWVV03eeg8SpTQKy5PZqSfjlRrItt5hS2n3PIysdPU_CCIQlCGXIGjoTDESp3l42Ueic3O1EaYXU-&query="+dessert+"&zip="+zipCode+"&results=5&output=json";
+		String baseUrl = "http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=qJIjRlbV34GJZfg2AwqSWVV03eeg8SpTQKy5PZqSfjlRrItt5hS2n3PIysdPU_CCIQlCGXIGjoTDESp3l42Ueic3O1EaYXU-&query="+dessert+"&zip="+zipCode+"&results=20&output=json";
 		URL finalURL;
 		try{
 			finalURL = new URL(baseUrl);
