@@ -30,8 +30,8 @@ public class LocationDB extends SQLiteOpenHelper{
 	public static final String COL_PHONE = "phone";
 	public static final String COL_COORDS = "cords";
 	private static final String CREATE_TABLE = "create table " + TABLE_NAME
-			+ " (" + ID + " integer primary key autoincrement, " + COL_TITLE + " text not null, " + COL_ADDRESS + " text not null, " + COL_CITY + " text not null, "
-			+ COL_STATE + " text not null, " + COL_PHONE + " text not null, " + COL_COORDS + " text not null);";
+			+ " (" + ID + " integer primary key autoincrement, " + COL_TITLE + " text UNIQUE NOT NULL, " + COL_ADDRESS + " text UNIQUE NOT NULL, " + COL_CITY + " text UNIQUE NOT NULL, "
+			+ COL_STATE + " text UNIQUE NOT NULL, " + COL_PHONE + " text UNIQUE NOT NULL, " + COL_COORDS + " text UNIQUE NOT NULL);";
 	private static final String DB_SCHEMA = CREATE_TABLE;		
 			
 			
@@ -48,9 +48,12 @@ public class LocationDB extends SQLiteOpenHelper{
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 		Log.w(DEBUG_TAG, "Upgrading database. Existing contents will be lost. ["
 	            + oldVersion + "]->[" + newVersion + "]");
-	    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-	    onCreate(db);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+		onCreate(db);
+	    
+	    
 	}
 
 
+	
 }

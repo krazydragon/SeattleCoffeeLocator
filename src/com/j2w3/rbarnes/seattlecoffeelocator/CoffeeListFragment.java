@@ -22,26 +22,31 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
 public class CoffeeListFragment extends ListFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private OnLocationSelectedListener locationSelectedListener;
-    private static final int TUTORIAL_LIST_LOADER = 1;
+    private static final int LOCATION_LIST_LOADER = 1;
 
     private SimpleCursorAdapter adapter;
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         String projection[] = { LocationDB.COL_PHONE };
-        Cursor tutorialCursor = getActivity().getContentResolver().query(
+        Cursor locationCursor = getActivity().getContentResolver().query(
                 Uri.withAppendedPath(LocationContentProvider.CONTENT_URI,
                         String.valueOf(id)), projection, null, null, null);
-        if (tutorialCursor.moveToFirst()) {
-            locationSelectedListener.onlocationSelected();
+        if (locationCursor.moveToFirst()) {
+        	String locationNumber = locationCursor.getString(0);
+        	
+        	Log.i("ITEM",locationNumber );
+        	
+            locationSelectedListener.onlocationSelected(locationNumber);
         }
-        tutorialCursor.close();
+        locationCursor.close();
     }
 
     @Override
@@ -51,7 +56,7 @@ public class CoffeeListFragment extends ListFragment implements
         String[] uiBindFrom = { LocationDB.COL_TITLE };
         int[] uiBindTo = { R.id.title };
 
-        getLoaderManager().initLoader(TUTORIAL_LIST_LOADER, null, this);
+        getLoaderManager().initLoader(LOCATION_LIST_LOADER, null, this);
 
         adapter = new SimpleCursorAdapter(
                 getActivity().getApplicationContext(), R.layout.list_item,
@@ -63,7 +68,7 @@ public class CoffeeListFragment extends ListFragment implements
     }
 
     public interface OnLocationSelectedListener {
-        public void onlocationSelected();
+        public void onlocationSelected(String number);
     }
 
     @Override

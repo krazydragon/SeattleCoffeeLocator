@@ -83,7 +83,7 @@ public class LocationContentProvider extends ContentProvider{
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sort) {
-		
+
 		
 		Cursor c = db.query(LocationDB.TABLE_NAME, projection, selection, selectionArgs, null, null, sort);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
