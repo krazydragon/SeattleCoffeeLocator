@@ -28,14 +28,22 @@ public class CoffeeMainActivity extends FragmentActivity implements OnLocationSe
 	String _phoneStr = "";
 	Button _callButton;
 	CoffeeDetailFragment _fragment;
+	static int serviceStarted = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		
-		//Start Service load data
-		startService(new Intent(this, CoffeeService.class));
+		
+		if(serviceStarted == 0){
+			//Start Service load data
+			startService(new Intent(this, CoffeeService.class));	
+			serviceStarted ++;
+			
+		}
+		
+		
 		setContentView(R.layout.fragment_coffee_main);
 		_callButton = (Button)findViewById(R.id.callButton);
 		_fragment = (CoffeeDetailFragment)getSupportFragmentManager().findFragmentById(R.id.detailFragment);
