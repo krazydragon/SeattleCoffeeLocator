@@ -29,9 +29,8 @@ public class LocationDB extends SQLiteOpenHelper{
 	public static final String COL_STATE = "state";
 	public static final String COL_PHONE = "phone";
 	public static final String COL_COORDS = "cords";
-	private static final String CREATE_TABLE = "create table " + TABLE_NAME
-			+ " (" + ID + " integer primary key autoincrement, " + COL_TITLE + " text UNIQUE NOT NULL, " + COL_ADDRESS + " text UNIQUE NOT NULL, " + COL_CITY + " text UNIQUE NOT NULL, "
-			+ COL_STATE + " text UNIQUE NOT NULL, " + COL_PHONE + " text UNIQUE NOT NULL, " + COL_COORDS + " text UNIQUE NOT NULL);";
+	private static final String CREATE_TABLE = "create table " + TABLE_NAME	+ " (" + ID + " integer primary key autoincrement, " + COL_TITLE + " text, " + COL_ADDRESS + " text, " + COL_CITY + " text, " + COL_STATE + " text, " + COL_PHONE + " text, " + COL_COORDS + " text);";
+
 	private static final String DB_SCHEMA = CREATE_TABLE;		
 			
 			
